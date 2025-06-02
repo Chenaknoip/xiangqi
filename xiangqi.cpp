@@ -1,19 +1,25 @@
+/****** XIANGQI GAME ******/
+/*                        */
+/* Author: CWKAPN         */
+/* Version: b1.1          */
+/**************************/
 #include <bits/stdc++.h>
 #include <windows.h>
 using namespace std;
-int nor[12][11] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                   0, 21, 22, 23, 24, 25, 24, 23, 22, 21,0,
-                   0, 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0,
-                   0, 0 , 27, 0 , 0 , 0 , 0 , 0 , 27, 0 ,0,
-                   0, 26, 0 , 26, 0 , 26, 0 , 26, 0 , 26,0,
-                   0, 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0,
-                   0, 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0,
-                   0, 16, 0 , 16, 0 , 16, 0 , 16, 0 , 16,0,
-                   0, 0 , 17, 0 , 0 , 0 , 0 , 0 , 17, 0 ,0,
-                   0, 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0,
-                   0, 11, 12, 13, 14, 15, 14, 13, 12, 11,0,
-                   0,0,0,0,0,0,0,0,0,0,0
-                  };
+const char SWVER[] = "b1.1"; 
+int nor[12][11] = {77, 97, 100, 101, 32, 98, 121, 0, 0, 0, 0,
+	0, 21, 22, 23, 24, 25, 24, 23, 22, 21,0,
+	0, 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0,
+	0, 0 , 27, 0 , 0 , 0 , 0 , 0 , 27, 0 ,0,
+	0, 26, 0 , 26, 0 , 26, 0 , 26, 0 , 26,0,
+	0, 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0,
+	0, 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0,
+	0, 16, 0 , 16, 0 , 16, 0 , 16, 0 , 16,0,
+	0, 0 , 17, 0 , 0 , 0 , 0 , 0 , 17, 0 ,0,
+	0, 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0,
+	0, 11, 12, 13, 14, 15, 14, 13, 12, 11,0,
+	67, 87, 75, 41, 80, 78, 0, 0, 0, 0, 0
+};
 int dsk[12][11];
 void output(int x, int y) {
 	if (dsk[x][y] == 0) {
@@ -345,7 +351,7 @@ bool done() {
 	}
 	return !(flag1 && flag2);
 }
-void work() {
+void workpar() {
 	bool fang = 0;
 	for (int i = 1; i <= 10; i++) {
 		for (int j = 1; j <= 9; j++) {
@@ -371,7 +377,7 @@ void work() {
 			}
 			putchar('\n');
 		}
-		cout << "  ";
+		cout << "   ";
 		for (int i = 1; i <= 10; i++) {
 			cout << i << " ";
 		}
@@ -384,8 +390,9 @@ void work() {
 		cout << "输入坐标, x1 y1 x2 y2：";
 		cin >> x >> y >> nx >> ny;
 		while (!ok(fang + 1, x, y, nx, ny)) {
-input:
+			input:
 			cout << "输入非法，重新输入：";
+			x = y = nx = ny = 0;
 			cin >> x >> y >> nx >> ny;
 		}
 		if (x == -1) {
@@ -412,6 +419,111 @@ input:
 		}
 		putchar('\n');
 	}
+	cout << "   ";
+	for (int i = 1; i <= 10; i++) {
+		cout << i << " ";
+	}
+	cout << "x\n\n";
+	system("pause");
+}
+void workai() {
+	bool fang = 0;
+	for (int i = 1; i <= 10; i++) {
+		for (int j = 1; j <= 9; j++) {
+			dsk[i][j] = nor[i][j];
+		}
+	}
+	int human = 0;
+	cout << "人类先手输入 1，电脑先手输入 2：";
+	while (true) {
+		human = 0; 
+		cin >> human;
+		if (human == 1 || human == 2) break;
+		cout << "输入非法请重试：";
+	}
+	human--;
+	// Written by Cwkapn
+	while (!done()) {
+		if (is_checkmated(fang) == 2) {
+			system("cls");
+			cout << ((int)fang == human ? "人类" : "电脑") << "被将死，";
+			break;
+		} else if (is_checkmated(fang) == 1) {
+			system("cls");
+			cout << ((int)fang == human ? "人类" : "电脑") << "被困毙，";
+			break;
+		}
+		system("cls");
+		cout << "y\n";
+		for (int i = 9; i >= 1; i--) {
+			cout << i << " ";
+			for (int j = 1; j <= 10; j++) {
+				output(j, i);
+			}
+			putchar('\n');
+		}
+		cout << "  ";
+		for (int i = 1; i <= 10; i++) {
+			cout << i << " ";
+		}
+		cout << "x\n\n";
+		if (fang == human) {
+			int x, y, nx, ny;
+			cout << "请您走棋。\n";
+			if (check(fang)) cout << "您正在被将军。\n";
+			cout << "认输请输入 -1 0 0 0。\n"; 
+			cout << "(x1, y1) 表示棋子坐标，(x2, y2) 表示目标坐标。\n";
+			cout << "输入坐标, x1 y1 x2 y2：";
+			cin >> x >> y >> nx >> ny;
+			while (!ok(fang + 1, x, y, nx, ny)) {
+				inpu:
+				cout << "输入非法请重试：";
+				x = y = nx = ny = 0;
+				cin >> x >> y >> nx >> ny;
+			}
+			if (x == -1) {
+				system("cls");
+				cout << "人类认输，";
+				break;
+			}
+			int ss = dsk[x][y], yuan = dsk[nx][ny];
+			dsk[x][y] = 0;
+			dsk[nx][ny] = ss;
+			if (check(fang)) {
+				dsk[x][y] = ss;
+				dsk[nx][ny] = yuan;
+				goto inpu;
+			}
+			fang ^= 1;
+		} else {
+			cout << "电脑计算中……\n";
+			Sleep(rand() % 3000);
+			int x, y, nx, ny;
+			x = rand() % 10 + 1; y = rand() % 9 + 1; nx = rand() % 10 + 1; ny = rand() % 9 + 1;
+			while (!ok(fang + 1, x, y, nx, ny)) {
+				cinpu:
+				x = rand() % 10 + 1; y = rand() % 9 + 1; nx = rand() % 10 + 1; ny = rand() % 9 + 1;
+			}
+			int ss = dsk[x][y], yuan = dsk[nx][ny];
+			dsk[x][y] = 0;
+			dsk[nx][ny] = ss;
+			if (check(fang)) {
+				dsk[x][y] = ss;
+				dsk[nx][ny] = yuan;
+				goto cinpu;
+			}
+			fang ^= 1;
+		}
+	}
+	cout << ((int)fang == human ? "电脑" : "人类") << "胜利！\n";
+	cout << "y\n";
+	for (int i = 9; i >= 1; i--) {
+		cout << i << " ";
+		for (int j = 1; j <= 10; j++) {
+			output(j, i);
+		}
+		putchar('\n');
+	}
 	cout << "  ";
 	for (int i = 1; i <= 10; i++) {
 		cout << i << " ";
@@ -420,9 +532,10 @@ input:
 	system("pause");
 }
 int main() {
+	srand(time(NULL)); 
 	while (true) {
 		system("cls");
-		cout << "\t中    国    象    棋\t\n\n";
+		cout << "\n\t中    国    象    棋\t\n\n\t版本号：" << SWVER << "\t\n\n";
 		for (int i = 1; i <= 10; i++) {
 			for (int j = 1; j <= 9; j++) {
 				dsk[i][j] = nor[i][j];
@@ -437,8 +550,15 @@ int main() {
 			putchar('\n');
 		}
 		cout << "\n";
-		system("pause");
-		work();
+		cout << "人机对战输入 1，双人对战输入 2：";
+		int op = 0;
+		while (true) {
+			cin >> op;
+			if (op == 1 || op == 2) break;
+			cout << "输入非法请重试：";
+		}
+		if (op == 1) workai();
+		else workpar();
 	}
 	return 0;
 }
